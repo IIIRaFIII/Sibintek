@@ -1,0 +1,165 @@
+﻿@model TaskManager.Models.Employee
+
+<form method="post" asp-action="Create">
+	<div class="border p-3">
+		<div class="form-group row">
+			<h2 class="text-info pl-3">Добавить сотрудника</h2>
+		</div>
+
+
+		<div class="row">
+			<div class="col-8">
+				<div class="form-group row">
+					<div class="col-4">
+						<label asp-for="FullName"></label>
+					</div>
+					<div class="col-8">
+						<input asp-for="FullName" class="form-control"/>
+						<span asp-validation-for="FullName" class="text-danger"></span>
+					</div>
+				</div>
+
+				<div class="form-group row">
+					<div class="col-4">
+						<label asp-for="DOB"></label>
+					</div>
+					<div class="col-8">
+						<input asp-for="DOB" class="form-control"/>
+						<span asp-validation-for="DOB" class="text-danger"></span>
+					</div>
+				</div>
+
+				<div class="form-group row">
+					<div class="col-4">
+						<label asp-for="Gender"></label>
+					</div>
+					<div class="col-8">
+						<input asp-for="Gender" class="form-control"/>
+						<span asp-validation-for="Gender" class="text-danger"></span>
+					</div>
+				</div>
+
+				
+
+				<div class="form-group row">
+					<div class="col-4">
+						<label asp-for="WorkingDays"></label>
+					</div>
+					<div class="col-8">
+						<div id="groupTop" class="col-8">		
+							<input type='checkbox' id="three" value="3" />3
+							<input type='checkbox' id="seven" value="7" />7
+						</div>
+						<div id="groupBottom" style="display: none;" class="col-8">
+							<input type='checkbox' class='chkbx' id= "chkbx" value="Понедельник" />Понедельник<br />
+							<input type='checkbox' class='chkbx' id= "chkbx" value="Вторник" />Вторник<br />
+							<input type='checkbox' class='chkbx' id= "chkbx" value="Среда" />Среда<br />
+							<input type='checkbox' class='chkbx' id= "chkbx" value="Четверг" />Четверг<br />
+							<input type='checkbox' class='chkbx' id= "chkbx" value="Пятница" />Пятница<br />
+							<input type='checkbox' class='chkbx' id= "chkbx" value="Суббота" />Суббота<br />
+							<input type='checkbox' class='chkbx' id= "chkbx" value="Воскресенье" />Воскресенье<br />
+							<input asp-for="WorkingDays" style="display: none;" id="TxtSelected" class='TxtSelected' class="form-control"/>
+						</div>
+					</div>
+				</div>
+
+				
+
+				<div id="StartTime" style="display: none;" class="form-group row">
+					<div class="col-4">
+						<label asp-for="StartTime"></label>
+					</div>
+					<div class="col-8">
+						<input asp-for="StartTime" class="form-control"/>
+						<span asp-validation-for="StartTime" class="text-danger"></span>
+						
+					</div>
+				</div>
+
+				<div class="form-group row">
+					<div class="col-8 offset-4 row">
+
+						<div class="col">
+						   <input id="Create" type="submit" class="btn btn-info w-100" value="Create"/>
+						</div>
+						<div class="col">
+							<a asp-action="Index" class="btn btn-success w-100">Back</a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-4">
+				@* Keep this empty *@
+			</div>
+		</div>
+		
+	</div>
+</form>
+
+@section Scripts
+{
+	<script>
+		//Выбрать кол-во дней
+		$('#groupTop input:checkbox').click(function(){
+			if ($(this).is(':checked')) {
+				$('#groupTop input:checkbox').not(this).prop('checked', false);
+			}
+		});
+
+		 
+		$('#three').click(function(){
+			$('#StartTime').hide(100);
+			$('#TxtSelected').val('');
+			if ($(this).is(':checked')){
+				$('#groupBottom').show(100);
+			} else {	
+				$('#groupBottom').hide(100);
+			}
+			$('#groupBottom input:checkbox').prop('checked', false);
+		});
+
+
+		$('#seven').click(function(){
+
+		
+			 $('#TxtSelected').val('Понедельник, Вторник, Среда, Четверг, Пятница, Суббота, Воскресенье');
+			$('#groupBottom').hide(100);
+			if ($(this).is(':checked')){
+				$('#StartTime').show(100);
+				$('#groupBottom input:checkbox').prop('checked', true);
+			} else {
+				$('#StartTime').hide(100);
+				$('#groupBottom input:checkbox').prop('checked', false);
+			}
+		});
+
+	  $('#groupBottom input:checkbox').click(function(){
+			var count = $('.chkbx:checked').length;
+			if ($('.chkbx:checked').length > 3) {
+				$(this).prop('checked', false)
+				alert("Можно выбрать максимум 3 дня");
+			}
+
+
+			$('.chkbx').click(function(){
+			 var text="";
+			 $('.chkbx:checked').each(function (){
+				  text += $(this).val() + ' ';
+
+			 });
+			 text = text.substring(0, text.length - 1);
+			 $('#TxtSelected').val(text);
+			 
+		  });
+	  });
+
+	  $( '#Create' ).click(function(e) {
+		if($('.chkbx:checked').length < 3) {
+			alert( 'Выбрано меньше 3 дней' );
+			e.preventDefault();
+		}
+	});
+	</script>
+
+	@{ <partial name="_ValidationScriptsPartial" />}
+}

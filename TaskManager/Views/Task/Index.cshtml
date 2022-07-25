@@ -1,0 +1,86 @@
+﻿@model IEnumerable<TaskManager.Models.Task>
+
+<div class="container p-3">
+	<div class="row pt-4">
+		<div class="col-6">
+			<h2 class="text-primary">Список задач</h2>
+		</div>
+		<div class="col-6 text-right">
+			<a asp-controller="Task" asp-action="Create" class="btn btn-primary">
+				  <i class="fas fa-plus"></i> &nbsp; Создать новую задачу
+			</a> 
+		</div>
+	</div>
+
+	<br /><br />
+
+	<!-- Проверка наличия объекта в списке  -->
+	@if(Model.Count() > 0)
+	{
+		<table class="table table-bordered table-striped" style="width:100%">
+			<thead>
+				<tr>
+					<th>
+						ID
+					</th>
+					<th>
+						Задача
+					</th>
+					<th>
+						Исполнитель
+					</th>
+					<th>
+						Приоритет
+					</th>
+					<th>
+						Дата выполнения
+					</th>
+					<th></th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach(var obj in Model)
+				{
+	
+						<tr class="@(!obj.Status ? (obj.Date<DateTime.Now)?"bg-danger":"bg-light" : "bg-success")">
+						
+						<td width="5%">@obj.Id</td>
+						<td width="30%">@obj.Name</td>
+						<td width="5%">@obj.Employee.FullName</td>
+						<td width="5%">@obj.Priority</td>
+						<td width="15%">@obj.Date</td>
+						
+						<td class="text-center">
+							<div class="w-50 btn-group" role="group">
+								<a asp-controller="Task" asp-route-Id="@obj.Id" asp-action="Edit" class="btn btn-primary"><i class="fas fa-edit"></i></a> 
+								<a asp-controller="Task" asp-route-Id="@obj.Id" asp-action="Delete" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a>
+							</div>
+						</td>
+						<td class="text-center">
+							<a asp-controller="Task" asp-route-Id="@obj.Id" asp-action="Change" 
+							style="@((obj.Date<DateTime.Now)? "display : none;" : "")" class="btn btn-primary fas fa-check">
+							</a> 
+						</td>		
+					</tr>
+
+						
+				}
+			</tbody>
+
+		 
+		</table>
+	}
+	else
+	{
+		<p>Нет текущих задач.</p>
+	}
+
+</div>
+
+@section Scripts
+{
+	<script>
+		
+	</script>
+}
